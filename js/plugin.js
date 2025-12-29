@@ -139,6 +139,59 @@ async function copyTagsFromJPGtoRAW() {
                 log(`✗ 未找到与 ${jpgItem.name} 对应的RAW文件`, 'info');
             }
         }
+
+        
+        
+        // 处理选中的RAW文件（标签为空时从JPG复制）
+        log(`开始检查选中的RAW文件...`, 'info');
+        let rawToProcessCount = 0;
+        let rawProcessedCount = 0;
+        
+        // 筛选选中的RAW文件
+        let selectedRaws = selected.filter(item => rawExts.includes(item.ext.toLowerCase()));
+        
+        if (selectedRaws.length > 0) {
+            log(`发现 ${selectedRaws.length} 个选中的RAW文件`, 'info');
+            
+            for (let rawItem of selectedRaws) {
+                rawToProcessCount++;
+                log(`检查第 ${rawToProcessCount}/${selectedRaws.length} 个RAW文件: ${rawItem.name}`, 'info');
+                
+                // 只处理标签为空的RAW文件
+                if (!rawItem.tags || rawItem.tags.length === 0) {
+                    // 获取RAW文件名（不含扩展名）
+                    let rawNameWithoutExt = rawItem.name.replace(/\.\w+$/, '');
+                    
+                    // 查找对应的JPG文件
+                    let jpgItem = allItems.find(item => {
+                        let itemNameWithoutExt = item.name.replace(/\.jpg$/i, '');
+                        return itemNameWithoutExt === rawNameWithoutExt && item.ext.toLowerCase() === 'jpg';
+                    });
+                    
+                    if (jpgItem) {
+                        // 将JPG的标签复制到RAW文件
+                        rawItem.tags = [...jpgItem.tags];
+                        
+                        // 将JPG的注释复制到RAW文件
+                        rawItem.annotation = jpgItem.annotation;
+                        
+                        // 添加到需要保存的项目列表
+                        itemsToSave.push(rawItem);
+                        
+                        rawProcessedCount++;
+                        log(`✓ 已将标签和注释从 ${jpgItem.name} 复制到 ${rawItem.name} (RAW标签为空)`, 'success');
+                    } else {
+                        log(`✗ 未找到与 ${rawItem.name} 对应的JPG文件`, 'info');
+                    }
+                } else {
+                    log(`✓ ${rawItem.name} 的标签不为空，跳过处理`, 'info');
+                }
+            }
+            
+            log(`RAW文件检查完成！共检查 ${selectedRaws.length} 个RAW文件，成功从JPG复制 ${rawProcessedCount} 个RAW文件的标签和注释`, 'success');
+        } else {
+            log(`没有发现选中的RAW文件，跳过RAW到JPG的标签复制`, 'info');
+        }
         
         // 统一保存所有修改过的RAW项目
         if (itemsToSave.length > 0) {
