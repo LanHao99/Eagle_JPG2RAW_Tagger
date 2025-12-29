@@ -234,161 +234,55 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        /* 进度面板样式 */
-        .progress-panel {
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e4e8;
-        }
-        
-        .progress-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .stat-item {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-        
-        .stat-label {
-            margin-right: 5px;
-            color: #586069;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: #24292e;
-        }
-        
-        .stat-value.success {
-            color: #28a745;
-        }
-        
-        .stat-value.error {
-            color: #dc3545;
-        }
-        
-        .progress-bar-container {
-            height: 8px;
-            background-color: #e1e4e8;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #28a745;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        
-        .current-file {
-            font-size: 12px;
-            color: #586069;
-            text-align: center;
-            padding: 5px;
-            background-color: #f6f8fa;
-            border-radius: 4px;
-        }
-        
-        /* 滚动条样式 */
-        .status-panel::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .status-panel::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
-        
-        .status-panel::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-        
-        .status-panel::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <h1>JPG-RAW标签互通插件</h1>
-        </header>
+        <div id="message"></div>
         
-        <div class="intro-card">
-            <h2>使用教程</h2>
-            <ol>
-                <li>将插件文件夹拖放到Eagle软件窗口中进行安装</li>
-                <li>在Eagle中打开插件</li>
-                <li>点击"同步JPG到RAW标签"按钮开始同步</li>
-                <li>查看同步结果和日志信息</li>
-                <li>点击"清空日志"按钮可以清空日志记录</li>
-            </ol>
+        <div class="container">
+            <header>
+                <h1>JPG-RAW标签互通插件</h1>
+            </header>
             
-            <h3>功能说明</h3>
-            <ul>
-                <li>插件会自动扫描Eagle中的JPG和RAW文件</li>
-                <li>获取JPG文件的标签信息</li>
-                <li>查找对应的同名RAW文件</li>
-                <li>将JPG文件的标签同步到对应的RAW文件</li>
-                <li>在界面上显示详细的同步进度和结果</li>
-            </ul>
-        </div>
-        
-
-        
-        <div class="control-panel">
-            <button id="syncJpgToRawBtn" onclick="syncJpgToRawTags()">
-                <span id="syncJpgToRawText">同步JPG到RAW标签</span>
-                <span id="syncJpgToRawLoading" class="loading" style="display: none;"></span>
-            </button>
-            <button id="clearBtn" onclick="clearLog()">清空日志</button>
-        </div>
-        
-        <!-- 进度显示面板 -->
-        <div class="progress-panel">
-            <div class="progress-stats">
-                <div class="stat-item">
-                    <span class="stat-label">已处理:</span>
-                    <span id="processedCount" class="stat-value">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">成功:</span>
-                    <span id="successCount" class="stat-value success">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">失败:</span>
-                    <span id="failedCount" class="stat-value error">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">总文件:</span>
-                    <span id="totalCount" class="stat-value">0</span>
-                </div>
+            <div class="intro-card">
+                <h2>功能说明</h2>
+                <p>此插件可以将选中的JPG文件的标签复制到对应的RAW文件中。</p>
+                
+                <h3>使用步骤</h3>
+                <ol>
+                    <li>在Eagle中选择一个或多个JPG文件</li>
+                    <li>点击下方的"开始处理"按钮</li>
+                    <li>插件会自动查找与JPG同名的RAW文件</li>
+                    <li>将JPG文件的标签复制到对应的RAW文件</li>
+                </ol>
+                
+                <h3>支持的RAW格式</h3>
+                <ul>
+                    <li>ARW (Sony)</li>
+                    <li>CR2, CR3 (Canon)</li>
+                    <li>DNG (Adobe)</li>
+                    <li>NEF (Nikon)</li>
+                    <li>NRW (Nikon)</li>
+                    <li>ORF (Olympus)</li>
+                    <li>PEF (Pentax)</li>
+                    <li>RAF (Fujifilm)</li>
+                    <li>RW2 (Panasonic)</li>
+                    <li>SRW (Samsung)</li>
+                    <li>RAW (通用)</li>
+                </ul>
             </div>
-            <div class="progress-bar-container">
-                <div id="progressBar" class="progress-bar"></div>
+            
+            <div class="control-panel">
+                <button id="startBtn">开始处理</button>
+                <button id="clearBtn">清空日志</button>
             </div>
-            <div id="currentFile" class="current-file"></div>
+            
+            <div class="status-panel" id="logContainer">
+                <!-- 日志信息将显示在这里 -->
+            </div>
         </div>
         
-        <div class="status-panel" id="status"></div>
-    </div>
-    
-    <script type="text/javascript" src="js/plugin.js"></script>
-</body>
+        <!-- 引入插件脚本 -->
+        <script src="./js/plugin.js"></script>
+    </body>
 </html>
