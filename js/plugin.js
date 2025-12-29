@@ -103,6 +103,7 @@ async function copyTagsFromJPGtoRAW() {
         // 存储处理结果
         let processedCount = 0;
         let foundCount = 0;
+        let itemsToSave = []; // 存储需要保存的RAW项目
         
         // 遍历选中的JPG文件
         for (let jpgItem of selectedJpgs) {
@@ -129,14 +130,24 @@ async function copyTagsFromJPGtoRAW() {
                 // 将JPG的注释复制到RAW文件
                 rawItem.annotation = jpgItem.annotation;
                 
-                // 保存更改
-                await rawItem.save();
+                // 添加到需要保存的项目列表
+                itemsToSave.push(rawItem);
                 
                 processedCount++;
                 log(`✓ 已将标签和注释从 ${jpgItem.name} 复制到 ${rawItem.name}`, 'success');
             } else {
                 log(`✗ 未找到与 ${jpgItem.name} 对应的RAW文件`, 'info');
             }
+        }
+        
+        // 统一保存所有修改过的RAW项目
+        if (itemsToSave.length > 0) {
+            log(`开始保存 ${itemsToSave.length} 个文件的更改...`, 'info');
+            for (let i = 0; i < itemsToSave.length; i++) {
+                await itemsToSave[i].save();
+                log(`已保存第 ${i + 1}/${itemsToSave.length} 个文件`, 'info');
+            }
+            log(`所有文件保存完成！`, 'success');
         }
         // 显示完成信息
         log(`处理完成！共处理 ${selectedJpgs.length} 个JPG文件，成功复制 ${processedCount} 个文件的标签和注释`, 'success');
