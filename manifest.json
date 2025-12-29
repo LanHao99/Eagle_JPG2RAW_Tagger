@@ -1,0 +1,19 @@
+{
+    "id": "cdabc216-448c-465f-ad6c-2fa714c916b7",
+    "version": "1.0.0",
+    "platform": "all",
+    "arch": "all",
+    "name": "jpg-raw标签互通插件",
+    "logo": "/logo.png",
+    "keywords": ["jpg", "raw", "标签", "同步"],
+    "devTools": true,
+    "main": {
+        "url": "index.html",
+        "width": 640,
+        "height": 520,
+        "frame": true,
+        "maximizable": false,
+        "minimizable": false,
+        "fullscreenable": false
+    }
+}
